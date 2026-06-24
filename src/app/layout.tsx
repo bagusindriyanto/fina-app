@@ -3,6 +3,7 @@ import { Outfit } from 'next/font/google';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import QueryProvider from '@/providers/query-client';
 
 const outfitHeading = Outfit({
   subsets: ['latin'],
@@ -32,7 +33,9 @@ export default function RootLayout({
       )}
     >
       <body className="flex flex-col min-h-full">
-        <TooltipProvider>{children}</TooltipProvider>
+        <QueryProvider>
+          <TooltipProvider>{children}</TooltipProvider>
+        </QueryProvider>
       </body>
     </html>
   );
