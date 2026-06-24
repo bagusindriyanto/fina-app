@@ -33,3 +33,34 @@ export async function getBalanceSummary() {
     savings,
   };
 }
+
+export async function getTransactions(params?: {
+  limit?: number;
+  page?: number;
+  search?: string;
+}) {
+  const { limit = 10, page = 1, search } = params || {};
+  const supabase = await createClient();
+  let query = supabase
+    .from('transactions')
+    .select('id, amount, type, description, date, category', {
+      count: 'exact',
+    });
+
+  if (search) {
+    query = query.ilike('description', `%${search}%`);
+  }
+
+  const from = (page - 1) * limit;
+  const to = from + limit - 1;
+
+  const { data, error, count } = await query.range(from, to);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  const totalData = count || 0;
+
+  return { data, totalData, totalPages: Math.ceil(totalData / limit) };
+}

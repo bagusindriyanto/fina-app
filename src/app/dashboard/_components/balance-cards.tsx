@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { getBalanceSummary } from '@/features/action';
+import { getBalanceSummary } from '@/features/transaction/action';
 import { convertToIDR } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import { TrendingDownIcon, TrendingUpIcon, WalletIcon } from 'lucide-react';
@@ -20,7 +20,7 @@ export default function BalanceCards() {
 
   if (error) {
     return (
-      <div className="w-full p-4 text-sm border rounded-lg border-destructive/50 text-destructive bg-destructive/10">
+      <div className="p-4 w-full text-sm rounded-lg border border-destructive/50 text-destructive bg-destructive/10">
         Failed to get balance
       </div>
     );
@@ -30,7 +30,7 @@ export default function BalanceCards() {
     <div className="grid grid-cols-1 gap-4 mb-8 md:grid-cols-3">
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-primary">
+          <CardTitle className="flex gap-2 items-center text-primary">
             <WalletIcon className="size-4" />
             Savings
           </CardTitle>
@@ -42,7 +42,7 @@ export default function BalanceCards() {
       </Card>
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-primary">
+          <CardTitle className="flex gap-2 items-center text-primary">
             <TrendingUpIcon className="size-4" />
             Incomes
           </CardTitle>
@@ -54,7 +54,7 @@ export default function BalanceCards() {
       </Card>
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-primary">
+          <CardTitle className="flex gap-2 items-center text-primary">
             <TrendingDownIcon className="size-4" />
             Expenses
           </CardTitle>
