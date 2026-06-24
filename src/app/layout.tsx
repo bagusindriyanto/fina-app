@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Outfit } from 'next/font/google';
 import './globals.css';
 import { cn } from '@/lib/utils';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 const outfitHeading = Outfit({
   subsets: ['latin'],
@@ -30,7 +31,9 @@ export default function RootLayout({
         outfit.variable,
       )}
     >
-      <body className="flex flex-col min-h-full">{children}</body>
+      <body className="flex flex-col min-h-full">
+        <TooltipProvider>{children}</TooltipProvider>
+      </body>
     </html>
   );
 }

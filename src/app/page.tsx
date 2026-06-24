@@ -1,14 +1,18 @@
 import { Button } from '@/components/ui/button';
 import { CoinsIcon } from 'lucide-react';
+import { Metadata } from 'next';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'Fina',
+  description: 'Your personal finance app with AI',
+};
 
 export default function Home() {
   return (
     <main className="flex flex-col justify-center items-center min-h-screen">
-      <CoinsIcon className="text-emerald-700 size-20" />
-      <h1 className="mt-2 text-4xl font-bold text-emerald-700">
-        Welcome to Fina
-      </h1>
+      <CoinsIcon className="text-primary size-20" />
+      <h1 className="mt-2 text-4xl font-bold text-primary">Welcome to Fina</h1>
       <p>Your personal finance app with AI</p>
       <Link href="/dashboard">
         <Button className="mt-2" size="lg">
