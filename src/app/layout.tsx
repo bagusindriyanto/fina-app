@@ -4,6 +4,7 @@ import './globals.css';
 import { cn } from '@/lib/utils';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import QueryProvider from '@/providers/query-client';
+import { Toaster } from '@/components/ui/sonner';
 
 const outfitHeading = Outfit({
   subsets: ['latin'],
@@ -34,7 +35,10 @@ export default function RootLayout({
     >
       <body className="flex flex-col min-h-full">
         <QueryProvider>
-          <TooltipProvider>{children}</TooltipProvider>
+          <TooltipProvider>
+            {children}
+            <Toaster richColors />
+          </TooltipProvider>
         </QueryProvider>
       </body>
     </html>
