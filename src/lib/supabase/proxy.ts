@@ -2,7 +2,7 @@ import { ENVIRONMENT } from '@/config/environment';
 import { createServerClient } from '@supabase/ssr';
 import { NextRequest, NextResponse } from 'next/server';
 
-export const supabaseProxy = async (request: NextRequest) => {
+export async function supabaseProxy(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request: {
       headers: request.headers,
@@ -43,4 +43,4 @@ export const supabaseProxy = async (request: NextRequest) => {
   }
 
   return supabaseResponse;
-};
+}

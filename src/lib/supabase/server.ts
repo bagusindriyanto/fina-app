@@ -2,7 +2,7 @@ import { ENVIRONMENT } from '@/config/environment';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
-export const createClient = async () => {
+export async function createClient() {
   const cookieStore = await cookies();
   return createServerClient(
     ENVIRONMENT.supabaseUrl!,
@@ -22,4 +22,4 @@ export const createClient = async () => {
       },
     },
   );
-};
+}

@@ -127,12 +127,12 @@ export default function UpdateTransactionDialog({
     }
   }, [selectedTransaction, form]);
 
-  const onSubmit = (data: FormSchema) => {
+  function onSubmit(data: FormSchema) {
     mutate({
       id: String(selectedTransaction?.data.id),
       data,
     });
-  };
+  }
 
   return (
     <Dialog

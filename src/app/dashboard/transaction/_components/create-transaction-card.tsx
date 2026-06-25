@@ -95,12 +95,12 @@ export default function CreateTransactionCard({
     },
   });
 
-  const onSubmit = (data: FormSchema) => {
+  function onSubmit(data: FormSchema) {
     mutate(data);
-  };
+  }
 
   return (
-    <Card className="w-full gap-2">
+    <Card className="gap-2 w-full">
       <CardHeader className="gap-0">
         <CardTitle>Create Transaction</CardTitle>
         <CardDescription>Add a new financial activity.</CardDescription>
