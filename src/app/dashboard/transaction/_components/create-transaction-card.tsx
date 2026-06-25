@@ -113,10 +113,10 @@ export default function CreateTransactionCard({
               name="amount"
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-amount">Amount</FieldLabel>
+                  <FieldLabel htmlFor="form-create-amount">Amount</FieldLabel>
                   <Input
                     {...field}
-                    id="form-amount"
+                    id="form-create-amount"
                     aria-invalid={fieldState.invalid}
                     placeholder="0,00"
                     autoComplete="off"
@@ -134,7 +134,7 @@ export default function CreateTransactionCard({
               name="type"
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-type">Type</FieldLabel>
+                  <FieldLabel htmlFor="form-create-type">Type</FieldLabel>
                   <Select
                     name={field.name}
                     items={typeItems}
@@ -142,7 +142,7 @@ export default function CreateTransactionCard({
                     onValueChange={field.onChange}
                   >
                     <SelectTrigger
-                      id="form-type"
+                      id="form-create-type"
                       aria-invalid={fieldState.invalid}
                     >
                       <SelectValue placeholder="Select type" />
@@ -168,7 +168,9 @@ export default function CreateTransactionCard({
               name="category"
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-category">Category</FieldLabel>
+                  <FieldLabel htmlFor="form-create-category">
+                    Category
+                  </FieldLabel>
                   <Select
                     name={field.name}
                     items={categoryItems}
@@ -176,7 +178,7 @@ export default function CreateTransactionCard({
                     onValueChange={field.onChange}
                   >
                     <SelectTrigger
-                      id="form-category"
+                      id="form-create-category"
                       aria-invalid={fieldState.invalid}
                     >
                       <SelectValue placeholder="Select category" />
@@ -202,9 +204,9 @@ export default function CreateTransactionCard({
               name="date"
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-date">Date</FieldLabel>
+                  <FieldLabel htmlFor="form-create-date">Date</FieldLabel>
                   <DatePicker
-                    id="form-date"
+                    id="form-create-date"
                     value={field.value ? new Date(field.value) : undefined}
                     onChange={(date) =>
                       field.onChange(date ? format(date, 'yyyy-MM-dd') : '')
@@ -221,12 +223,12 @@ export default function CreateTransactionCard({
               name="description"
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-description">
+                  <FieldLabel htmlFor="form-create-description">
                     Description
                   </FieldLabel>
                   <Textarea
                     {...field}
-                    id="form-description"
+                    id="form-create-description"
                     aria-invalid={fieldState.invalid}
                     placeholder="Enter description"
                     autoComplete="off"

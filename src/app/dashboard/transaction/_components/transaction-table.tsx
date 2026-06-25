@@ -38,6 +38,7 @@ import { cn, convertToIDR } from '@/lib/utils';
 import { PencilIcon, Trash2Icon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import DeleteTransactionDialog from './delete-transaction-dialog';
+import UpdateTransactionDialog from './update-transaction-dialog';
 
 const TABLE_HEADER = [
   '#',
@@ -138,7 +139,12 @@ export default function TransactionTable({
                         variant="ghost"
                         size="icon"
                         className="text-muted-foreground hover:text-yellow-500"
-                        onClick={() => {}}
+                        onClick={() => {
+                          setSelectedTransaction({
+                            data: transaction,
+                            action: 'update',
+                          });
+                        }}
                       >
                         <PencilIcon className="size-4" />
                       </Button>
@@ -225,6 +231,11 @@ export default function TransactionTable({
         </CardContent>
       </Card>
       <DeleteTransactionDialog
+        selectedTransaction={selectedTransaction}
+        setSelectedTransaction={setSelectedTransaction}
+        refetch={refetch}
+      />
+      <UpdateTransactionDialog
         selectedTransaction={selectedTransaction}
         setSelectedTransaction={setSelectedTransaction}
         refetch={refetch}

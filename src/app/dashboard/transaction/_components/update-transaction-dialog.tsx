@@ -1,5 +1,6 @@
 import { Transaction } from '@/app/types/transaction';
 import { Button } from '@/components/ui/button';
+import DatePicker from '@/components/ui/date-picker';
 import {
   Dialog,
   DialogContent,
@@ -8,13 +9,45 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import { updateTransaction } from '@/features/transaction/action';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
+import { format } from 'date-fns';
 import { Dispatch, SetStateAction, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import z from 'zod';
+
+const typeItems = [
+  { label: 'Income', value: 'income' },
+  { label: 'Expense', value: 'expense' },
+];
+
+const categoryItems = [
+  { label: 'Food & Drink', value: 'Food & Drink' },
+  { label: 'Transportation', value: 'Transportation' },
+  { label: 'Entertaiment', value: 'Entertaiment' },
+  { label: 'Shopping', value: 'Shopping' },
+  { label: 'Housing', value: 'Housing' },
+  { label: 'Salary', value: 'Salary' },
+  { label: 'Others', value: 'Others' },
+];
 
 const formSchema = z.object({
   amount: z.string().min(1, 'Amount is required'),
@@ -106,14 +139,151 @@ export default function UpdateTransactionDialog({
       open={!!selectedTransaction && selectedTransaction.action === 'update'}
       onOpenChange={() => setSelectedTransaction(null)}
     >
-      <DialogContent className="gap-4">
-        <DialogHeader className="gap-4">
-          <DialogTitle>Are you sure?</DialogTitle>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Update Transaction</DialogTitle>
           <DialogDescription>
-            This action cannot be undone. This will permanently delete your
-            transaction from the database.
+            Update the transaction data below.
           </DialogDescription>
         </DialogHeader>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          id="form-update-transaction"
+        >
+          <FieldGroup className="gap-3">
+            <Controller
+              control={form.control}
+              name="amount"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="form-update-amount">Amount</FieldLabel>
+                  <Input
+                    {...field}
+                    id="form-update-amount"
+                    aria-invalid={fieldState.invalid}
+                    placeholder="0,00"
+                    autoComplete="off"
+                    type="number"
+                    min="0"
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="type"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="form-update-type">Type</FieldLabel>
+                  <Select
+                    name={field.name}
+                    items={typeItems}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                  >
+                    <SelectTrigger
+                      id="form-update-type"
+                      aria-invalid={fieldState.invalid}
+                    >
+                      <SelectValue placeholder="Select type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {typeItems.map((item) => (
+                          <SelectItem key={item.value} value={item.value}>
+                            {item.label}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="category"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="form-update-category">
+                    Category
+                  </FieldLabel>
+                  <Select
+                    name={field.name}
+                    items={categoryItems}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                  >
+                    <SelectTrigger
+                      id="form-update-category"
+                      aria-invalid={fieldState.invalid}
+                    >
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {categoryItems.map((item) => (
+                          <SelectItem key={item.value} value={item.value}>
+                            {item.label}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="date"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="form-update-date">Date</FieldLabel>
+                  <DatePicker
+                    id="form-update-date"
+                    value={field.value ? new Date(field.value) : undefined}
+                    onChange={(date) =>
+                      field.onChange(date ? format(date, 'yyyy-MM-dd') : '')
+                    }
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="description"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="form-update-description">
+                    Description
+                  </FieldLabel>
+                  <Textarea
+                    {...field}
+                    id="form-update-description"
+                    aria-invalid={fieldState.invalid}
+                    placeholder="Enter description"
+                    autoComplete="off"
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+          </FieldGroup>
+        </form>
         <DialogFooter>
           <Button
             variant="ghost"
@@ -123,13 +293,12 @@ export default function UpdateTransactionDialog({
             Cancel
           </Button>
           <Button
-            variant="destructive"
-            onClick={() => {
-              if (!!selectedTransaction) mutate(selectedTransaction.data.id);
-            }}
-            disabled={isPending}
+            size="lg"
+            type="submit"
+            form="form-update-transaction"
+            disabled={!form.formState.isValid || isPending}
           >
-            {isPending ? 'Deleting...' : 'Delete'}
+            {isPending ? 'Updating...' : 'Update Transaction'}
           </Button>
         </DialogFooter>
       </DialogContent>
