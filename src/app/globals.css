@@ -135,6 +135,10 @@
 @utility response-ai {
   @apply flex flex-col flex-wrap;
 
+  div {
+    @apply max-w-full;
+  }
+
   p {
     @apply w-full my-2 text-wrap;
   }
