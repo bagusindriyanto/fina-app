@@ -1,9 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { Field } from '@/components/ui/field';
 import { Spinner } from '@/components/ui/spinner';
+import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { SendIcon } from 'lucide-react';
-import { KeyboardEvent } from 'react';
+import { BrainIcon, SendIcon } from 'lucide-react';
+import { Dispatch, KeyboardEvent, SetStateAction } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import z from 'zod';
 
@@ -12,11 +13,15 @@ const formSchema = z.object({
 });
 
 export default function ChatbotTextarea({
-  sendMessage,
+  isThinking,
+  setIsThinking,
   isPending,
+  sendMessage,
 }: {
-  sendMessage: (message: string) => void;
+  isThinking: boolean;
+  setIsThinking: Dispatch<SetStateAction<boolean>>;
   isPending: boolean;
+  sendMessage: (message: string) => void;
 }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -59,7 +64,22 @@ export default function ChatbotTextarea({
         )}
       />
       <div className="flex justify-between">
-        <div></div>
+        <div>
+          <Button
+            type="button"
+            size="icon"
+            variant="ghost"
+            className={cn(
+              'text-muted-foreground hover:bg-primary/10 hover:text-primary',
+              {
+                'bg-primary/10 text-primary': isThinking,
+              },
+            )}
+            onClick={() => setIsThinking(!isThinking)}
+          >
+            <BrainIcon />
+          </Button>
+        </div>
         <div>
           <Button
             type="submit"
