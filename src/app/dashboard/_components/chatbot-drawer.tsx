@@ -90,7 +90,7 @@ export default function ChatbotDrawer() {
   useEffect(() => {
     if (chatRef.current) {
       chatRef.current?.scrollTo({
-        top: chatRef.current?.scrollHeight,
+        top: chatRef.current.scrollHeight,
         behavior: 'smooth',
       });
     }
@@ -103,7 +103,7 @@ export default function ChatbotDrawer() {
           <BotIcon />
         </Button>
       </DrawerTrigger>
-      <DrawerContent className='w-screen! md:w-110!"'>
+      <DrawerContent className="w-screen! md:w-110!">
         <DrawerHeader className="flex flex-row justify-between">
           <div>
             <DrawerTitle className="font-bold text-primary">
@@ -158,7 +158,7 @@ export default function ChatbotDrawer() {
                                   <ChevronDownIcon />
                                 </CollapsibleTrigger>
                                 <CollapsibleContent>
-                                  <div className="ml-4 border-l pl-2">
+                                  <div className="pl-2 ml-4 border-l">
                                     <Markdown>{part.text}</Markdown>
                                   </div>
                                 </CollapsibleContent>

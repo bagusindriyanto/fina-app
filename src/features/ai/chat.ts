@@ -47,5 +47,6 @@ export async function handleChatWithThinking(message: string) {
       result.answer += part.text;
     }
   }
+
   return result;
 }
