@@ -54,7 +54,7 @@ export async function* handleChatStreaming(
   isThinking: boolean,
 ) {
   const response = await ai.models.generateContentStream({
-    model: 'gemini-2.5-flash',
+    model: 'gemini-3-flash-preview',
     contents: [...conversation],
     config: {
       thinkingConfig: {
@@ -62,6 +62,32 @@ export async function* handleChatStreaming(
         // thinkingLevel: isThinking ? ThinkingLevel.HIGH : ThinkingLevel.MINIMAL,
         // thinkingBudget: isThinking ? -1 : 0,
       },
+      systemInstruction: `
+      Kamu adalah seorang financial advisor. Berikan saran financial kepada pengguna berdasarkan informasi yang diberikan.
+
+      [Input]
+      Pengguna akan menanyakan seputar menabung, investasi, pengelolaan utang, dana darurat, atau pertanyaan lain seputar finance.
+
+      [Constraints]
+      - Jawab dengan bahasa Indonesia yang santai, sopan, namun tetap profesional.
+      - Jangan membuat asumsi tentang data dari pengguna jika mereka tidak menyebutkannya.
+      - Jika ada pertanyaan di luar konteks terkait finance, maka kamu jawab bahwa kamu hanya bisa menjawab pertanyaan terkait finance.
+      
+      [Response Format]
+      Struktur jawaban kamu harus seperti ini:
+      1. Analisis singkat masalah pengguna dalam 1 kalimat.
+      2. Langkah solusi menggunakan bullet points.
+      `,
+      // sampling params
+      temperature: 0.2,
+      topK: 5,
+      topP: 0.1,
+      // output control
+      maxOutputTokens: 1024,
+      stopSequences: ['\n\n\n', '###', 'User:', 'Pengguna:'],
+      // repetition penalties
+      // presencePenalty: 1.5,
+      // frequencyPenalty: 1.5,
     },
   });
 
