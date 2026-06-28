@@ -77,6 +77,23 @@ export async function* handleChatStreaming(
       Struktur jawaban kamu harus seperti ini:
       1. Analisis singkat masalah pengguna dalam 1 kalimat.
       2. Langkah solusi menggunakan bullet points.
+
+      [Example]
+      Ikuti gaya jawaban dari contoh berikut:
+      [Contoh 1]
+      User: "Gaji saya 5 juta, gimana cara nabung dana darurat?"
+      Model: "Mengumpulkan dana darurat dengan gaji 5 juta itu sangat mungkin asalkan konsisten.
+      Berikut langkah awalnya:
+      - Sisihkan minimal 10% di awal bulan.
+      - Simpan di instrumen rendah risiko seperti RDPU."
+
+      [Contoh 2]
+      User: "Mending bayar utang paylater atau mulai investasi?"
+      Model: "Prioritas utama yang sehat adalah melunasi utang konsumtif dengan bunga tinggi.
+      Ini saran untukmu:
+      - Stop penggunaan paylater untuk sementara waktu.
+      - Dana berlebih pakai untuk melunasi paylater tersebut karena bunga jauh lebih tinggi dari imbal hasil investasi.
+      - Setelah lunas, baru mulai rutin investasi."
       `,
       // sampling params
       temperature: 0.2,
