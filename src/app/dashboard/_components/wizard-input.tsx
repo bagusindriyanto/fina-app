@@ -1,0 +1,87 @@
+'use client';
+
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Field } from '@/components/ui/field';
+import { Spinner } from '@/components/ui/spinner';
+import { handleWizardInput } from '@/features/ai/chat';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { SendIcon, SparkleIcon } from 'lucide-react';
+import { KeyboardEvent } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import z from 'zod';
+
+const formSchema = z.object({
+  message: z.string().min(1, 'Message is required'),
+});
+
+export default function WizardInput() {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      message: '',
+    },
+  });
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: handleWizardInput,
+    onSuccess: (response) => {
+      console.log(response);
+      form.reset();
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  function onSubmit(data: z.infer<typeof formSchema>) {
+    mutate(data.message);
+  }
+
+  function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      if (!isPending) onSubmit(form.getValues());
+    }
+  }
+
+  return (
+    <Card className="w-full border-primary/20 p-0">
+      <CardContent className="px-4">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex items-center gap-2"
+        >
+          <div className="text-primary">
+            <SparkleIcon className="size-5" />
+          </div>
+          <Controller
+            control={form.control}
+            name="message"
+            render={({ field, fieldState }) => (
+              <Field>
+                <input
+                  {...field}
+                  id="chatbot-message"
+                  placeholder="Ask AI Advisor here"
+                  autoComplete="off"
+                  className="h-14 focus:outline-none"
+                  onKeyDown={handleKeyDown}
+                />
+              </Field>
+            )}
+          />
+          <Button
+            type="submit"
+            size="icon"
+            variant="ghost"
+            disabled={isPending}
+          >
+            {isPending ? <Spinner /> : <SendIcon />}
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
+  );
+}
