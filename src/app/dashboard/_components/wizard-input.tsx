@@ -28,7 +28,7 @@ export default function WizardInput({ refetch }: { refetch: () => void }) {
   const { mutate, isPending } = useMutation({
     mutationFn: handleWizardTools,
     onSuccess: (response) => {
-      toast.success('Transaction created successfully!');
+      toast.success(response);
       refetch();
       form.reset();
     },
