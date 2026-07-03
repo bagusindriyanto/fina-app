@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Field } from '@/components/ui/field';
 import { Spinner } from '@/components/ui/spinner';
 import { handleWizardInput } from '@/features/ai/chat';
+import { generateEmbedding } from '@/features/ai/embedding';
 import { createTransaction } from '@/features/transaction/action';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
@@ -34,7 +35,10 @@ export default function WizardInput({ refetch }: { refetch: () => void }) {
         throw new Error('Failed to process AI input');
       }
 
-      return createTransaction(aiResponse);
+      const embedding = await generateEmbedding(JSON.stringify(aiResponse));
+      console.log(embedding);
+      return;
+      // return createTransaction(aiResponse);
     },
     onSuccess: (response) => {
       toast.success('Transaction created successfully!');
@@ -74,7 +78,7 @@ export default function WizardInput({ refetch }: { refetch: () => void }) {
           <Controller
             control={form.control}
             name="message"
-            render={({ field, fieldState }) => (
+            render={({ field }) => (
               <Field>
                 <input
                   {...field}
