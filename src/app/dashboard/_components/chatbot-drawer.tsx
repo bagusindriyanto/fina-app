@@ -29,39 +29,7 @@ export default function ChatbotDrawer() {
   const chatRef = useRef<HTMLDivElement>(null);
   const [conversation, setConversation] = useState<Conversation[]>([]);
   const [isThinking, setIsThinking] = useState<boolean>(false);
-
-  // const { mutate: handleChatMutation, isPending } = useMutation({
-  //   mutationFn: ({
-  //     isThinking,
-  //   }: {
-  //     isThinking: boolean;
-  //   }) => handleChat(conversation, isThinking),
-  //   onSuccess: (response) => {
-  //     let parts: {
-  //       text: string;
-  //       thought?: boolean;
-  //     }[] = [];
-
-  //     if (response?.thought !== '') {
-  //       parts = [
-  //         ...parts,
-  //         { thought: true, text: response?.thought || 'Terjadi kesalahan' },
-  //       ];
-  //     }
-  //     const botMessage: Conversation = {
-  //       role: 'model',
-  //       parts: [...parts, { text: response?.answer || 'Terjadi kesalahan' }],
-  //     };
-  //     setConversation((prev) => [...prev, botMessage]);
-  //   },
-  //   onError: (error) => {
-  //     const botMessage: Conversation = {
-  //       role: 'model',
-  //       parts: [{ text: 'Terjadi kesalahan: ' + error.message }],
-  //     };
-  //     setConversation((prev) => [...prev, botMessage]);
-  //   },
-  // });
+  const [mode, setMode] = useState<'general' | 'personal'>('general');
 
   const { mutate: handleChatMutation, isPending } = useMutation({
     mutationFn: async ({ isThinking }: { isThinking: boolean }) => {
@@ -74,7 +42,7 @@ export default function ChatbotDrawer() {
         const response = await handleChatStreaming(
           conversation,
           isThinking,
-          'personal',
+          mode,
         );
 
         for await (const chunk of response) {
@@ -113,7 +81,7 @@ export default function ChatbotDrawer() {
         const response = await handleChatStreaming(
           conversation,
           isThinking,
-          'personal',
+          mode,
         );
 
         for await (const chunk of response) {
@@ -161,13 +129,14 @@ export default function ChatbotDrawer() {
   }, [conversation]);
 
   return (
-    <Drawer direction="right" modal={false}>
-      <DrawerTrigger className="fixed right-4 bottom-4" asChild>
-        <Button size="icon-lg" className="rounded-full">
-          <BotIcon />
-        </Button>
+    <Drawer swipeDirection="right" modal={false}>
+      <DrawerTrigger
+        className="fixed right-4 bottom-4"
+        render={<Button size="icon-lg" className="rounded-full" />}
+      >
+        <BotIcon />
       </DrawerTrigger>
-      <DrawerContent className="w-screen! md:w-110!">
+      <DrawerContent>
         <DrawerHeader className="flex flex-row justify-between">
           <div>
             <DrawerTitle className="font-bold text-primary">
@@ -177,13 +146,11 @@ export default function ChatbotDrawer() {
               Get personalized financial advice.
             </DrawerDescription>
           </div>
-          <DrawerClose asChild>
-            <Button variant="outline" size="icon">
-              <XIcon />
-            </Button>
+          <DrawerClose render={<Button variant="outline" size="icon" />}>
+            <XIcon />
           </DrawerClose>
         </DrawerHeader>
-        <div className="overflow-y-auto px-4 h-full no-scrollbar">
+        <div className="overflow-y-auto p-4 h-full no-scrollbar">
           {conversation.length > 0 ? (
             <div
               ref={chatRef}
@@ -260,6 +227,8 @@ export default function ChatbotDrawer() {
             setIsThinking={setIsThinking}
             isPending={isPending}
             sendMessage={sendMessage}
+            mode={mode}
+            setMode={setMode}
           />
         </DrawerFooter>
       </DrawerContent>
