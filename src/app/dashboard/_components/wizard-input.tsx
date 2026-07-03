@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Field } from '@/components/ui/field';
 import { Spinner } from '@/components/ui/spinner';
-import { handleWizardInput } from '@/features/ai/wizard';
+import { handleWizardInput, handleWizardTools } from '@/features/ai/wizard';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { SendIcon, SparkleIcon } from 'lucide-react';
@@ -26,7 +26,7 @@ export default function WizardInput({ refetch }: { refetch: () => void }) {
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: handleWizardInput,
+    mutationFn: handleWizardTools,
     onSuccess: (response) => {
       toast.success('Transaction created successfully!');
       refetch();

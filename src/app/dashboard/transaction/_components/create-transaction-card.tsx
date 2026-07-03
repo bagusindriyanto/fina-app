@@ -39,7 +39,7 @@ const typeItems = [
 const categoryItems = [
   { label: 'Food & Drink', value: 'Food & Drink' },
   { label: 'Transportation', value: 'Transportation' },
-  { label: 'Entertaiment', value: 'Entertaiment' },
+  { label: 'Entertainment', value: 'Entertainment' },
   { label: 'Shopping', value: 'Shopping' },
   { label: 'Housing', value: 'Housing' },
   { label: 'Salary', value: 'Salary' },
