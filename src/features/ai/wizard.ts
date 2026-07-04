@@ -3,7 +3,11 @@
 import z from 'zod';
 import { createAI } from './instance';
 import { FunctionDeclaration, Type } from '@google/genai';
-import { createTransaction, deleteTransaction } from '../transaction/action';
+import {
+  createTransaction,
+  deleteTransaction,
+  updateTransaction,
+} from '../transaction/action';
 import { findEmbedding } from './embedding';
 
 const transactionSchema = z.object({
@@ -101,7 +105,8 @@ const transactionProperties = {
   },
   description: {
     type: Type.STRING,
-    description: 'A brief description of the transaction',
+    description:
+      'A brief description of the transaction. First letter capitalized',
   },
   date: {
     type: Type.STRING,
@@ -124,6 +129,16 @@ const deleteTransactionDeclaration: FunctionDeclaration = {
   name: 'delete_transaction',
   description:
     "Delete an existing transaction from user's financial history based on the provided data.",
+  parameters: {
+    type: Type.OBJECT,
+    properties: transactionProperties,
+  },
+};
+
+const updateTransactionDeclaration: FunctionDeclaration = {
+  name: 'update_transaction',
+  description:
+    "Update an existing transaction from user's financial history based on the provided data.",
   parameters: {
     type: Type.OBJECT,
     properties: transactionProperties,
@@ -156,6 +171,7 @@ export async function handleWizardTools(message: string) {
           functionDeclarations: [
             createTransactionDeclaration,
             deleteTransactionDeclaration,
+            updateTransactionDeclaration,
           ],
         },
       ],
@@ -177,19 +193,45 @@ export async function handleWizardTools(message: string) {
             }
             await createTransaction(transaction);
             break;
+
           case 'delete_transaction':
-            const data = await findEmbedding(JSON.stringify(args), 0.9, 1);
-            if (!data || data.length === 0) {
+            const dataFindForDelete = await findEmbedding(
+              JSON.stringify(args),
+              0.9,
+              1,
+            );
+            if (!dataFindForDelete || dataFindForDelete.length === 0) {
               throw new Error('No transaction found that matches the criteria');
             }
-            const deletedData = data[0];
+            const deletedData = dataFindForDelete[0];
             await deleteTransaction(deletedData.id);
             break;
+
+          case 'update_transaction':
+            const dataFindForUpdate = await findEmbedding(
+              JSON.stringify(args),
+              0.9,
+              1,
+            );
+            if (!dataFindForUpdate || dataFindForUpdate.length === 0) {
+              throw new Error('No transaction found that matches the criteria');
+            }
+            const updatedData = dataFindForUpdate[0];
+            const newData = transactionSchema.parse(args);
+
+            if (newData.amount <= 0) {
+              throw new Error('Cannot update transaction with invalid amount');
+            }
+
+            await updateTransaction(updatedData.id, newData);
+            break;
+
           default:
             throw new Error('Unknown function call');
         }
       }),
     );
+
     return 'Function executed successfully';
   } else {
     throw new Error('AI did not call any function');
