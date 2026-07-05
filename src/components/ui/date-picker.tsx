@@ -36,7 +36,7 @@ export default function DatePicker({
         {value ? format(value, 'M/d/yyyy') : <span>Pick a date</span>}
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
-        <Calendar mode="single" selected={value} onSelect={onChange} />
+        <Calendar required mode="single" selected={value} onSelect={onChange} />
       </PopoverContent>
     </Popover>
   );

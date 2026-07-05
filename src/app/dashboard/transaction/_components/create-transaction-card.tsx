@@ -98,7 +98,7 @@ export default function CreateTransactionCard({
         <CardDescription>Add a new financial activity.</CardDescription>
       </CardHeader>
       <CardContent>
-        <FileDropzoneInput setValues={form.setValues} refetch={refetch} />
+        <FileDropzoneInput setValues={form.setValues} />
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup className="gap-3">
             <Controller

@@ -9,7 +9,6 @@ import { toast } from 'sonner';
 
 export default function FileDropzoneInput({
   setValues,
-  // refetch,
 }: {
   setValues: UseFormSetValues<{
     amount: string;
@@ -18,7 +17,6 @@ export default function FileDropzoneInput({
     date: string;
     description: string;
   }>;
-  // refetch: () => void;
 }) {
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
