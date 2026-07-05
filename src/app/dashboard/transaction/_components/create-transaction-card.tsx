@@ -30,6 +30,7 @@ import { useMutation } from '@tanstack/react-query';
 import { createTransaction } from '@/features/transaction/action';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
+import FileDropzoneInput from '../../_components/file-dropzone-input';
 
 const typeItems = [
   { label: 'Income', value: 'income' },
@@ -106,6 +107,7 @@ export default function CreateTransactionCard({
         <CardDescription>Add a new financial activity.</CardDescription>
       </CardHeader>
       <CardContent>
+        <FileDropzoneInput setValues={form.setValues} refetch={refetch} />
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup className="gap-3">
             <Controller
