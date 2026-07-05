@@ -46,7 +46,11 @@ export default function FileDropzoneInput({
   });
 
   async function processFile(file: File) {
-    if (!file.type.endsWith('pdf')) {
+    if (
+      !file.type.endsWith('pdf') &&
+      !file.type.startsWith('image') &&
+      !file.type.startsWith('video')
+    ) {
       toast.error('File type not supported');
       return;
     }
@@ -89,7 +93,7 @@ export default function FileDropzoneInput({
         type="file"
         ref={fileInputRef}
         className="hidden"
-        accept=".pdf"
+        accept=".pdf, image/*, video/*"
         onChange={(e) => e.target.files && processFile(e.target.files[0])}
       />
       {isPending ? (
