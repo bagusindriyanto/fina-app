@@ -10,11 +10,12 @@ import {
 import { Field } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
-import { generateChart } from '@/features/ai/generative-content';
+import { generateChart, generateImage } from '@/features/ai/generative-content';
 import { convertToIDR } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { ChartPieIcon, SparkleIcon, SparklesIcon } from 'lucide-react';
+import { ChartPieIcon, ImageIcon, SparklesIcon } from 'lucide-react';
+import Image from 'next/image';
 import { KeyboardEvent, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
@@ -38,11 +39,18 @@ export default function GenerativeContent() {
     'chart',
   );
 
-  const [result, setResult] = useState<{
-    type: 'chart';
-    chartType: 'bar' | 'pie';
-    data: { name: string; value: number }[];
-  } | null>(null);
+  const [result, setResult] = useState<
+    | {
+        type: 'chart';
+        chartType: 'bar' | 'pie';
+        data: { name: string; value: number }[];
+      }
+    | {
+        type: 'image';
+        data: string;
+      }
+    | null
+  >(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -57,6 +65,13 @@ export default function GenerativeContent() {
         case 'chart':
           const result = await generateChart(request);
           return { ...result, type: 'chart' };
+
+        case 'image':
+          const resultImage = await generateImage(request);
+          return {
+            type: 'image',
+            data: resultImage,
+          };
 
         default:
           return null;
@@ -88,7 +103,8 @@ export default function GenerativeContent() {
 
   // 1. Transformasi data dan buat chartConfig secara dinamis
   const { chartConfig, processedData } = useMemo(() => {
-    if (!result) return { chartConfig: {}, processedData: [] };
+    if (!result || result.type !== 'chart')
+      return { chartConfig: {}, processedData: [] };
 
     const config: ChartConfig = {};
     const { chartType, data } = result;
@@ -100,7 +116,10 @@ export default function GenerativeContent() {
       // Untuk Pie Chart: Tiap item data butuh config warna unik sendiri
       const mappedData = data.map((item, index) => {
         // Buat key yang aman untuk objek/CSS (clean string)
-        const configKey = item.name.toLowerCase().replace(/[^a-z0-9]/g, '_');
+        const configKey = item.name
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '_')
+          .replace(/^_+|_+$/g, '');
 
         config[configKey] = {
           label: item.name,
@@ -124,7 +143,10 @@ export default function GenerativeContent() {
 
       // Jika ingin Bar-nya warna-warni seperti Pie, gunakan mapping di bawah ini:
       const mappedData = data.map((item, index) => {
-        const configKey = item.name.toLowerCase().replace(/[^a-z0-9]/g, '_');
+        const configKey = item.name
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '_')
+          .replace(/^_+|_+$/g, '');
         config[configKey] = {
           label: item.name,
           color: getChartColor(index),
@@ -144,7 +166,7 @@ export default function GenerativeContent() {
       <CardHeader>
         <div className="flex flex-col gap-4 justify-between lg:flex-row lg:items-center">
           <CardTitle className="flex gap-2 items-center text-xl">
-            <SparkleIcon className="size-5 text-primary" />
+            <SparklesIcon className="size-5 text-primary" />
             Generative AI Insight
           </CardTitle>
           <form
@@ -159,6 +181,14 @@ export default function GenerativeContent() {
                 onClick={() => setInsightType('chart')}
               >
                 <ChartPieIcon />
+              </Button>
+              <Button
+                type="button"
+                variant={insightType === 'image' ? 'default' : 'secondary'}
+                size="icon"
+                onClick={() => setInsightType('image')}
+              >
+                <ImageIcon />
               </Button>
             </ButtonGroup>
             <div className="flex flex-row gap-2">
@@ -313,6 +343,17 @@ export default function GenerativeContent() {
                   </PieChart>
                 )}
               </ChartContainer>
+            )}
+            {result.type === 'image' && (
+              <div className="flex items-center">
+                <Image
+                  width={1920}
+                  height={1080}
+                  src={result.data}
+                  alt="Generate Image"
+                  className="rounded-xl"
+                />
+              </div>
             )}
           </div>
         )}
