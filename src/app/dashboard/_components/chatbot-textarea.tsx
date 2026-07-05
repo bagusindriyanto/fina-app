@@ -14,7 +14,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Spinner } from '@/components/ui/spinner';
-import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { BrainIcon, SendIcon } from 'lucide-react';
 import { Dispatch, KeyboardEvent, SetStateAction } from 'react';
@@ -42,8 +41,8 @@ export default function ChatbotTextarea({
   isThinking: boolean;
   setIsThinking: Dispatch<SetStateAction<boolean>>;
   isPending: boolean;
-  mode: 'general' | 'personal';
-  setMode: Dispatch<SetStateAction<'general' | 'personal'>>;
+  mode: 'general' | 'personal' | null;
+  setMode: Dispatch<SetStateAction<'general' | 'personal' | null>>;
 }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -91,9 +90,7 @@ export default function ChatbotTextarea({
                 <Select
                   items={modeItems}
                   value={mode}
-                  onValueChange={(value: 'general' | 'personal') =>
-                    setMode(value)
-                  }
+                  onValueChange={(value) => setMode(value)}
                 >
                   <SelectTrigger className="bg-background shadow-xs" size="sm">
                     <SelectValue />

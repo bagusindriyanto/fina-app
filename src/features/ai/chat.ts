@@ -2,7 +2,7 @@
 
 import { Conversation } from '@/app/types/ai';
 import { createAI } from './instance';
-import { findEmbedding, generateEmbedding } from './embedding';
+import { findEmbedding } from './embedding';
 import { Content, FunctionCall, Part } from '@google/genai';
 import { getTransactionDeclaration } from './function-transaction';
 
@@ -128,7 +128,7 @@ async function generalChat(conversation: Content[], isThinking?: boolean) {
 export async function* handleChatStreaming(
   conversation: Content[],
   isThinking: boolean,
-  mode: 'general' | 'personal',
+  mode: 'general' | 'personal' | null,
 ) {
   if (mode === 'general') {
     const response = await generalChat(conversation, isThinking);
@@ -155,7 +155,7 @@ export async function* handleChatStreaming(
         }
       }
     }
-  } else {
+  } else if (mode === 'personal') {
     const query = conversation[conversation.length - 1]?.parts?.[0].text;
     const historyChat = conversation.slice(0, -1);
     const ai = createAI();
@@ -286,5 +286,7 @@ export async function* handleChatStreaming(
         running = false;
       }
     }
+  } else {
+    throw new Error('No mode provided');
   }
 }
