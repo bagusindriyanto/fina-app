@@ -2,7 +2,7 @@
 
 import z from 'zod';
 import { createAI } from './instance';
-import { Content, FunctionDeclaration, Type } from '@google/genai';
+import { Content } from '@google/genai';
 import {
   createTransaction,
   deleteTransaction,

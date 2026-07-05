@@ -182,9 +182,9 @@ export async function* handleChatStreaming(
               - If user question is general and not need a data, response generally.
               - The final response if there are no more functions being called is as simple as possible.
             </instruction>
-            <content>
+            <context>
               Curent Date: ${new Date().toISOString()}
-            </content>
+            </context>
             <constraints>
               - Answer in relaxed, polite bu professional in Indonesian.
               - Don't make assumptions about data from users if they don't mention it.
