@@ -10,11 +10,15 @@ import {
 import { Field } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
-import { generateChart, generateImage } from '@/features/ai/generative-content';
+import {
+  generateChart,
+  generateImage,
+  generateVideo,
+} from '@/features/ai/generative-content';
 import { convertToIDR } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { ChartPieIcon, ImageIcon, SparklesIcon } from 'lucide-react';
+import { ChartPieIcon, ImageIcon, SparklesIcon, VideoIcon } from 'lucide-react';
 import Image from 'next/image';
 import { KeyboardEvent, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -49,6 +53,10 @@ export default function GenerativeContent() {
         type: 'image';
         data: string;
       }
+    | {
+        type: 'video';
+        data: string;
+      }
     | null
   >(null);
 
@@ -65,12 +73,18 @@ export default function GenerativeContent() {
         case 'chart':
           const result = await generateChart(request);
           return { ...result, type: 'chart' };
-
         case 'image':
           const resultImage = await generateImage(request);
           return {
             type: 'image',
             data: resultImage,
+          };
+
+        case 'video':
+          const resultVideo = await generateVideo(request);
+          return {
+            type: 'video',
+            data: resultVideo,
           };
 
         default:
@@ -79,6 +93,7 @@ export default function GenerativeContent() {
     },
     onSuccess: (response) => {
       setResult(response);
+      form.reset();
       toast.success(`Success generate ${insightType}`);
     },
     onError: (error) => {
@@ -190,6 +205,14 @@ export default function GenerativeContent() {
               >
                 <ImageIcon />
               </Button>
+              <Button
+                type="button"
+                variant={insightType === 'video' ? 'default' : 'secondary'}
+                size="icon"
+                onClick={() => setInsightType('video')}
+              >
+                <VideoIcon />
+              </Button>
             </ButtonGroup>
             <div className="flex flex-row gap-2">
               <Controller
@@ -212,7 +235,7 @@ export default function GenerativeContent() {
               <Button type="submit" disabled={isPending}>
                 {isPending ? <Spinner /> : <SparklesIcon />}
                 <span className="hidden lg:inline">
-                  {result ? 'Update' : 'Generate'}
+                  {isPending ? 'Generating...' : result ? 'Update' : 'Generate'}
                 </span>
               </Button>
             </div>
@@ -344,6 +367,7 @@ export default function GenerativeContent() {
                 )}
               </ChartContainer>
             )}
+
             {result.type === 'image' && (
               <div className="flex items-center">
                 <Image
@@ -353,6 +377,28 @@ export default function GenerativeContent() {
                   alt="Generate Image"
                   className="rounded-xl"
                 />
+              </div>
+            )}
+
+            {result.type === 'video' && (
+              <div className="flex items-center">
+                {/* Contoh video */}
+                <iframe
+                  src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=40Z_ZKhtfuBj4SI6"
+                  title="YouTube video player"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                  className="w-full rounded-xl border aspect-video"
+                ></iframe>
+                {/* Hasil asli dari API */}
+                {/* <video
+                  src={result.data}
+                  controls
+                  className="w-full rounded-xl border aspect-video"
+                >
+                  Your browser doesn&apos;t support
+                </video> */}
               </div>
             )}
           </div>
