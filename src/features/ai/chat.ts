@@ -59,7 +59,7 @@ async function generalChat(conversation: Content[], isThinking?: boolean) {
         // thinkingLevel: isThinking ? ThinkingLevel.HIGH : ThinkingLevel.MINIMAL,
         // thinkingBudget: isThinking ? -1 : 0,
       },
-      tools: [{ googleSearch: {} }],
+      tools: [{ googleSearch: {}, urlContext: {} }],
       systemInstruction: `
       [Role]
       Kamu adalah Finabot seorang financial advisor, yang punya gaya bahasa sopan dan suka
