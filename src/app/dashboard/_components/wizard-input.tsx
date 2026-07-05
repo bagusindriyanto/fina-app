@@ -7,7 +7,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { handleWizardInput, handleWizardTools } from '@/features/ai/wizard';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { MicIcon, SendIcon, SparkleIcon, SquareIcon } from 'lucide-react';
+import { MicIcon, SendIcon, SparklesIcon, SquareIcon } from 'lucide-react';
 import { KeyboardEvent, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import Markdown from 'react-markdown';
@@ -110,7 +110,7 @@ export default function WizardInput({ refetch }: { refetch: () => void }) {
           className="flex gap-2 items-center"
         >
           <div className="text-primary">
-            <SparkleIcon className="size-5" />
+            <SparklesIcon className="size-5" />
           </div>
           <Controller
             control={form.control}
@@ -119,7 +119,7 @@ export default function WizardInput({ refetch }: { refetch: () => void }) {
               <Field>
                 <input
                   {...field}
-                  id="chatbot-message"
+                  id="form-message"
                   placeholder={
                     isRecording
                       ? 'Listening...'
