@@ -200,10 +200,21 @@ export async function* handleChatStreaming(
     let running = true;
     while (running) {
       const response = await ai.models.generateContentStream({
-        model: 'gemini-2.5-flash',
+        model: 'gemini-3.5-flash',
         contents,
         config: {
-          tools: [{ functionDeclarations: [getTransactionDeclaration] }],
+          tools: [
+            {
+              // PAID API
+              // googleSearch: {},
+              // urlContext: {},
+              functionDeclarations: [getTransactionDeclaration],
+            },
+          ],
+          // PAID API
+          // toolConfig: {
+          //   includeServerSideToolInvocations: true,
+          // },
           thinkingConfig: {
             includeThoughts: isThinking,
           },
