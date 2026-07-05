@@ -67,18 +67,47 @@ export async function handleWizardInput(message: string) {
   return 'Transaction created successfully';
 }
 
-export async function handleWizardTools(message: string) {
-  const contents: Content[] = [
-    {
-      role: 'user',
-      parts: [
-        {
-          text: `
+export async function handleWizardTools(formData: FormData) {
+  const file = formData.get('file') as File;
+  const type = formData.get('type') as 'audio' | 'text';
+  const request = formData.get('request') as string;
+
+  const isText = type === 'text';
+
+  if (!isText && !file) {
+    throw new Error('No file uploaded');
+  }
+
+  let mimeType = '';
+  let base64Data = '';
+
+  if (!isText && file) {
+    mimeType = file.type;
+    base64Data = Buffer.from(await file.arrayBuffer()).toString('base64');
+  }
+
+  const contents: Content[] = [];
+
+  contents.push({
+    role: 'user',
+    parts: [
+      ...(!isText
+        ? [
+            {
+              inlineData: {
+                mimeType,
+                data: base64Data,
+              },
+            },
+          ]
+        : []),
+      {
+        text: `
             <role>
-                You are an AI Wizard finance assitant, who can extract transaction details from text.
+                You are an AI Wizard finance assitant, who can extract transaction details from ${isText ? 'text' : 'audio'} in Indonesian.
             </role>
             <instruction>
-              - Extract the transaction details from the following text.
+              - Extract the transaction details from ${isText ? 'the following text' : 'the audio file'}.
               - If request is to update or delete transaction, you must call function get_transaction first to find out which transaction will be updated or deleted.
               - When update transaction, args must return from get_transaction before with fully like in schema.
               - The final response if there are no more functions being called is as simple as possible.
@@ -86,14 +115,16 @@ export async function handleWizardTools(message: string) {
             <context>
                 Current Date: ${new Date().toISOString()}
             </context>
-            <input>
-                Text to extract: ${message}
-            </input>
+            ${
+              isText &&
+              `<input>
+                Text to extract: ${request}
+               </input>`
+            }
           `,
-        },
-      ],
-    },
-  ];
+      },
+    ],
+  });
 
   const ai = createAI();
   let running = true;
