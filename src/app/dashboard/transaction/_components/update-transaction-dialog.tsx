@@ -25,6 +25,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { CATEGORIES } from '@/constants/transaction-constant';
 import { updateTransaction } from '@/features/transaction/action';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
@@ -37,16 +38,6 @@ import z from 'zod';
 const typeItems = [
   { label: 'Income', value: 'income' },
   { label: 'Expense', value: 'expense' },
-];
-
-const categoryItems = [
-  { label: 'Food & Drink', value: 'Food & Drink' },
-  { label: 'Transportation', value: 'Transportation' },
-  { label: 'Entertainment', value: 'Entertainment' },
-  { label: 'Shopping', value: 'Shopping' },
-  { label: 'Housing', value: 'Housing' },
-  { label: 'Salary', value: 'Salary' },
-  { label: 'Others', value: 'Others' },
 ];
 
 const formSchema = z.object({
@@ -216,7 +207,6 @@ export default function UpdateTransactionDialog({
                   </FieldLabel>
                   <Select
                     name={field.name}
-                    items={categoryItems}
                     value={field.value}
                     onValueChange={field.onChange}
                   >
@@ -228,9 +218,9 @@ export default function UpdateTransactionDialog({
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        {categoryItems.map((item) => (
-                          <SelectItem key={item.value} value={item.value}>
-                            {item.label}
+                        {CATEGORIES.map((category) => (
+                          <SelectItem key={category} value={category}>
+                            {category}
                           </SelectItem>
                         ))}
                       </SelectGroup>

@@ -31,20 +31,11 @@ import { createTransaction } from '@/features/transaction/action';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import FileDropzoneInput from '../../_components/file-dropzone-input';
+import { CATEGORIES } from '@/constants/transaction-constant';
 
 const typeItems = [
   { label: 'Income', value: 'income' },
   { label: 'Expense', value: 'expense' },
-];
-
-const categoryItems = [
-  { label: 'Food & Drink', value: 'Food & Drink' },
-  { label: 'Transportation', value: 'Transportation' },
-  { label: 'Entertainment', value: 'Entertainment' },
-  { label: 'Shopping', value: 'Shopping' },
-  { label: 'Housing', value: 'Housing' },
-  { label: 'Salary', value: 'Salary' },
-  { label: 'Others', value: 'Others' },
 ];
 
 const formSchema = z.object({
@@ -175,7 +166,7 @@ export default function CreateTransactionCard({
                   </FieldLabel>
                   <Select
                     name={field.name}
-                    items={categoryItems}
+                    // items={categoryItems}
                     value={field.value}
                     onValueChange={field.onChange}
                   >
@@ -187,9 +178,9 @@ export default function CreateTransactionCard({
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        {categoryItems.map((item) => (
-                          <SelectItem key={item.value} value={item.value}>
-                            {item.label}
+                        {CATEGORIES.map((category) => (
+                          <SelectItem key={category} value={category}>
+                            {category}
                           </SelectItem>
                         ))}
                       </SelectGroup>
@@ -241,11 +232,7 @@ export default function CreateTransactionCard({
                 </Field>
               )}
             />
-            <Button
-              size="lg"
-              type="submit"
-              disabled={!form.formState.isValid || isPending}
-            >
+            <Button size="lg" type="submit" disabled={isPending}>
               {isPending ? 'Creating...' : 'Create Transaction'}
             </Button>
           </FieldGroup>

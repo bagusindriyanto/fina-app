@@ -15,24 +15,10 @@ import {
   getTransactionDeclaration,
   updateTransactionDeclaration,
 } from './function-transaction';
-
-const transactionSchema = z.object({
-  amount: z.number().default(0).describe('Transaction nominal'),
-  type: z.enum(['income', 'expense']).describe('Type of transaction'),
-  category: z
-    .enum([
-      'Food & Drink',
-      'Transportation',
-      'Entertainment',
-      'Shopping',
-      'Housing',
-      'Salary',
-      'Others',
-    ])
-    .describe('Category of transaction'),
-  description: z.string().describe('Short text for describing transaction'),
-  date: z.string().describe('The date of transaction in YYYY-MM-DD format'),
-});
+import {
+  CATEGORIES,
+  transactionSchema,
+} from '@/constants/transaction-constant';
 
 export async function handleWizardInput(message: string) {
   const contents = `
@@ -45,7 +31,7 @@ export async function handleWizardInput(message: string) {
     - "amount": a number representing the cost (positive). Use 0 if not provided.
     - "type": type of transaction, either 'income' or 'expense'.
     - "category": choose the most appropriate category from this exact list:
-                  'Food & Drink','Shopping','Housing','Transportation','Entertainment','Salary','Others'.
+                  ${CATEGORIES.join(', ')}.
     - "description": a short string describing the transaction, first letter capitalized.
     - "date": date of transaction in YYYY-MM-DD format.
               Assume the current date if relative terms like 'today' or 'just now'. If not define use current date.
@@ -108,6 +94,7 @@ export async function handleWizardTools(message: string) {
       ],
     },
   ];
+
   const ai = createAI();
   let running = true;
   while (running) {
