@@ -104,7 +104,7 @@ export async function generateChart(request: string) {
 }
 
 export async function generateImage(request: string) {
-  return 'https://images.unsplash.com/photo-1579762593217-46655e4e7efc?q=80&w=1217&auto=format&fit=crop';
+  return 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=870&auto=format&fit=crop';
 
   // PAID API
   // const ai = createAI();

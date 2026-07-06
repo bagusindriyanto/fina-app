@@ -369,7 +369,10 @@ export default function GenerativeContent() {
             )}
 
             {result.type === 'image' && (
-              <div className="flex items-center">
+              <div className="flex flex-col gap-2 items-center">
+                <p className="text-sm text-muted-foreground">
+                  (Hanya sebagai contoh, fitur ini memerlukan API berbayar)
+                </p>
                 <Image
                   width={1920}
                   height={1080}
@@ -381,7 +384,10 @@ export default function GenerativeContent() {
             )}
 
             {result.type === 'video' && (
-              <div className="flex items-center">
+              <div className="flex flex-col gap-2 items-center">
+                <p className="text-sm text-muted-foreground">
+                  (Hanya sebagai contoh, fitur ini memerlukan API berbayar)
+                </p>
                 {/* Contoh video */}
                 <iframe
                   src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=40Z_ZKhtfuBj4SI6"
