@@ -23,7 +23,7 @@ import {
 export async function handleWizardInput(message: string) {
   const contents = `
   <role>
-    You are an AI Wizard finance assitant, who can extract transaction details from text.
+    You are an AI Wizard finance assistant, who can extract transaction details from text.
   </role>
   <instruction>
     Extract the transaction details from the following text and return it as a structure JSON object.
@@ -104,7 +104,7 @@ export async function handleWizardTools(formData: FormData) {
       {
         text: `
             <role>
-                You are an AI Wizard finance assitant, who can extract transaction details from ${type} in Indonesian.
+                You are an AI Wizard finance assistant, who can extract transaction details from ${type} in Indonesian.
             </role>
             <instruction>
               - Extract the transaction details from ${isText ? 'the following text' : 'the audio file'}.

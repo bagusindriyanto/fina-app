@@ -51,7 +51,7 @@ export async function generateChart(request: string) {
             - Use 'chartType: "bar"' if the user asks for comparisons, over-time trends, chronological analysis, or comparing individual entities.
         </instruction>
         <context>
-          Curent Date: ${new Date().toISOString()}
+          Current Date: ${new Date().toISOString()}
           Data Transaction: ${contextData}
         </context>
         <constraints>
@@ -131,7 +131,7 @@ export async function generateImage(request: string) {
   //       text: `
   //       <role>
   //         You are an AI Financial Analyst and Data illustrator. Your task is to analyze transactions in <context>
-  //         and generate an image for infographic and conpectual dashboard in bento grid style that directly response the user's request.
+  //         and generate an image for infographic and conceptual dashboard in bento grid style that directly response the user's request.
   //       </role>
   //       <input>
   //         User request: "${request}"
@@ -213,7 +213,7 @@ export async function generateVideo(request: string) {
   // const contents = `
   //   <role>
   //     You are an AI Financial Analyst and motion designer. Your task is to analyze transactions in <context>
-  //     and generate a video for infographic and conpectual dashboard in bento grid style that directly response the user's request.
+  //     and generate a video for infographic and conceptual dashboard in bento grid style that directly response the user's request.
   //   </role>
   //   <input>
   //     User request: "${request}"

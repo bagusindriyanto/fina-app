@@ -183,10 +183,10 @@ export async function* handleChatStreaming(
               - The final response if there are no more functions being called is as simple as possible.
             </instruction>
             <context>
-              Curent Date: ${new Date().toISOString()}
+              Current Date: ${new Date().toISOString()}
             </context>
             <constraints>
-              - Answer in relaxed, polite bu professional in Indonesian.
+              - Answer in relaxed, polite but professional in Indonesian.
               - Don't make assumptions about data from users if they don't mention it.
               - If there are questions outside the context related to finance, you must only answer questions related to finance.
               - Don't answer in table format instead of markdown.

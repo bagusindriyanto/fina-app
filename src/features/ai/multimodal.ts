@@ -30,7 +30,7 @@ export async function extractReceiptData(formData: FormData) {
         {
           text: `
             <role>
-              You are an AI finance assitant, who can extract transaction details from receipt.
+              You are an AI finance assistant, who can extract transaction details from receipt.
             </role>
             <instruction>
               Extract the transaction details from the receipt and return it as a structure JSON object.
