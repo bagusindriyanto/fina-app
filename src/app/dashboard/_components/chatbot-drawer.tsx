@@ -181,7 +181,7 @@ export default function ChatbotDrawer() {
                         {message.parts.map((part, indexPart) => (
                           <div key={`response-ai-${index}-${indexPart}`}>
                             {part.thought ? (
-                              <Collapsible>
+                              <Collapsible defaultOpen>
                                 <CollapsibleTrigger
                                   render={<Button variant="ghost" size="sm" />}
                                 >
